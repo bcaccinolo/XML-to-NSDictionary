@@ -72,10 +72,13 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     // Return the stack's root dictionary on success
     if (success){
 	
-        NSDictionary *resultDict = [dictionaryStack objectAtIndex:0];
+        NSDictionary *resultDict = [dictionaryStack objectAtIndex:0]; 
+
+		[parser release];
         return resultDict;
     }
-    
+               
+	[parser release];
     return nil;
 }
 
