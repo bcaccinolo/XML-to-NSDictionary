@@ -1,0 +1,7 @@
+The key ideas:
+
+  1 XML elements map to key names in the dictionary
+  2 Each element corresponds to a child dictionary
+  3 Attribute key-value pairs are added to the element’s child dictionary
+  4 Strings from text nodes are assigned to the child dictionary’s “text” key
+  5 If an element name is encountered multiple times, the value of the element is set to an array of children dictionaries
