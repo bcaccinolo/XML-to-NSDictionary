@@ -69,6 +69,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     parser.delegate = self;
     BOOL success = [parser parse];
     
+    [parser release];
     // Return the stack's root dictionary on success
     if (success)
     {
