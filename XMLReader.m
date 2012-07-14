@@ -4,65 +4,48 @@
 
 #import "XMLReader.h"
 
-NSString *const kXMLReaderTextNodeKey = @"text";
+static NSString *const kXMLReaderTextNodeKey = @"text";
+
+@interface XMLReader()
+@property (strong, nonatomic) NSMutableArray *dictionaryStack;
+@property (strong, nonatomic) NSMutableString *textInProgress;
+@property (assign, nonatomic) NSError *__autoreleasing *error;
+@end
 
 @interface XMLReader (Internal)
-
-- (id)initWithError:(NSError **)error;
 - (NSDictionary *)objectWithData:(NSData *)data;
-
 @end
 
 
 @implementation XMLReader
+@synthesize dictionaryStack, textInProgress;
 
 #pragma mark -
 #pragma mark Public methods
 
-+ (NSDictionary *)dictionaryForXMLData:(NSData *)data error:(NSError **)error
++ (NSDictionary *)dictionaryForXMLData:(NSData *)data error:(NSError **)errorPointer
 {
-    XMLReader *reader = [[XMLReader alloc] initWithError:error];
-    NSDictionary *rootDictionary = [reader objectWithData:data];
-    [reader release];
-    return rootDictionary;
+    XMLReader *reader = [XMLReader new];
+	reader.error = errorPointer;
+    return [reader objectWithData:data];
 }
 
-+ (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)error
++ (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)errorPointer
 {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-    return [XMLReader dictionaryForXMLData:data error:error];
+    return [XMLReader dictionaryForXMLData:data error:errorPointer];
 }
 
 #pragma mark -
 #pragma mark Parsing
 
-- (id)initWithError:(NSError **)error
-{
-    if (self = [super init])
-    {
-        errorPointer = error;
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [dictionaryStack release];
-    [textInProgress release];
-    [super dealloc];
-}
-
 - (NSDictionary *)objectWithData:(NSData *)data
 {
-    // Clear out any old data
-    [dictionaryStack release];
-    [textInProgress release];
-    
-    dictionaryStack = [[NSMutableArray alloc] init];
-    textInProgress = [[NSMutableString alloc] init];
+    self.dictionaryStack = [[NSMutableArray alloc] init];
+    self.textInProgress = [[NSMutableString alloc] init];
     
     // Initialize the stack with a fresh dictionary
-    [dictionaryStack addObject:[NSMutableDictionary dictionary]];
+    [self.dictionaryStack addObject:[NSMutableDictionary dictionary]];
     
     // Parse the XML
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
@@ -72,7 +55,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     // Return the stack's root dictionary on success
     if (success)
     {
-        NSDictionary *resultDict = [dictionaryStack objectAtIndex:0];
+        NSDictionary *resultDict = [self.dictionaryStack objectAtIndex:0];
         return resultDict;
     }
     
@@ -86,7 +69,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 {
     // Get the dictionary for the current level in the stack
     NSMutableDictionary *parentDict = [dictionaryStack lastObject];
-
+	
     // Create the child dictionary for the new element, and initilaize it with the attributes
     NSMutableDictionary *childDict = [NSMutableDictionary dictionary];
     [childDict addEntriesFromDictionary:attributeDict];
@@ -106,7 +89,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
             // Create an array if it doesn't exist
             array = [NSMutableArray array];
             [array addObject:existingValue];
-
+			
             // Replace the child dictionary with an array of children dictionaries
             [parentDict setObject:array forKey:elementName];
         }
@@ -133,10 +116,9 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     if ([textInProgress length] > 0)
     {
         [dictInProgress setObject:textInProgress forKey:kXMLReaderTextNodeKey];
-
+		
         // Reset the text
-        [textInProgress release];
-        textInProgress = [[NSMutableString alloc] init];
+        self.textInProgress = [[NSMutableString alloc] init];
     }
     
     // Pop the current dict
@@ -152,7 +134,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     // Set the error pointer to the parser's error object
-    *errorPointer = parseError;
+	(*self.error) = parseError;
 }
 
 @end
