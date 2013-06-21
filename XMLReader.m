@@ -38,8 +38,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 - (id)initWithError:(NSError **)error
 {
-    if (self = [super init])
-    {
+    if (self = [super init]) {
         errorPointer = error;
     }
     return self;
@@ -71,8 +70,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     
     [parser release];
     // Return the stack's root dictionary on success
-    if (success)
-    {
+    if (success) {
         NSDictionary *resultDict = dictionaryStack[0];
         return resultDict;
     }
@@ -98,16 +96,12 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     
     // If there's already an item for this key, it means we need to create an array
     id existingValue = parentDict[elementName];
-    if (existingValue)
-    {
+    if (existingValue) {
         NSMutableArray *array = nil;
-        if ([existingValue isKindOfClass:[NSMutableArray class]])
-        {
+        if ([existingValue isKindOfClass:[NSMutableArray class]]) {
             // The array exists, so use it
             array = (NSMutableArray *) existingValue;
-        }
-        else
-        {
+        } else {
             // Create an array if it doesn't exist
             array = [NSMutableArray array];
             [array addObject:existingValue];
@@ -118,9 +112,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
         
         // Add the new child dictionary to the array
         [array addObject:childDict];
-    }
-    else
-    {
+    } else {
         // No existing value, so update the dictionary
         parentDict[elementName] = childDict;
     }
@@ -140,8 +132,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     NSMutableDictionary *dictInProgress = [dictionaryStack lastObject];
     
     // Set the text property
-    if ([textInProgress length] > 0)
-    {
+    if ([textInProgress length] > 0) {
         dictInProgress[kXMLReaderTextNodeKey] = textInProgress;
 
         // Reset the text
