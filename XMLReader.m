@@ -73,7 +73,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     // Return the stack's root dictionary on success
     if (success)
     {
-        NSDictionary *resultDict = [dictionaryStack objectAtIndex:0];
+        NSDictionary *resultDict = dictionaryStack[0];
         return resultDict;
     }
     
@@ -85,6 +85,10 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
+    #pragma unused(parser)
+    #pragma unused(namespaceURI)
+    #pragma unused(qName)
+    
     // Get the dictionary for the current level in the stack
     NSMutableDictionary *parentDict = [dictionaryStack lastObject];
 
@@ -93,7 +97,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     [childDict addEntriesFromDictionary:attributeDict];
     
     // If there's already an item for this key, it means we need to create an array
-    id existingValue = [parentDict objectForKey:elementName];
+    id existingValue = parentDict[elementName];
     if (existingValue)
     {
         NSMutableArray *array = nil;
@@ -109,7 +113,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
             [array addObject:existingValue];
 
             // Replace the child dictionary with an array of children dictionaries
-            [parentDict setObject:array forKey:elementName];
+            parentDict[elementName] = array;
         }
         
         // Add the new child dictionary to the array
@@ -118,7 +122,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     else
     {
         // No existing value, so update the dictionary
-        [parentDict setObject:childDict forKey:elementName];
+        parentDict[elementName] = childDict;
     }
     
     // Update the stack
@@ -127,13 +131,18 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
+    #pragma unused(parser)
+    #pragma unused(elementName)
+    #pragma unused(namespaceURI)
+    #pragma unused(qName)
+
     // Update the parent dict with text info
     NSMutableDictionary *dictInProgress = [dictionaryStack lastObject];
     
     // Set the text property
     if ([textInProgress length] > 0)
     {
-        [dictInProgress setObject:textInProgress forKey:kXMLReaderTextNodeKey];
+        dictInProgress[kXMLReaderTextNodeKey] = textInProgress;
 
         // Reset the text
         [textInProgress release];
@@ -146,12 +155,16 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
+    #pragma unused(parser)
+
     // Build the text value
     [textInProgress appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
+    #pragma unused(parser)
+
     // Set the error pointer to the parser's error object
     *errorPointer = parseError;
 }
