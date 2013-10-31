@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1B8D1772-3625-4AE0-B19E-58AFCDAABF75</string>
+	<key>IDESourceControlProjectName</key>
+	<string>XmlReader</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4C4329DE-D36E-4430-A46A-10672F2D471F</key>
+		<string>ssh://github.com/bcaccinolo/XML-to-NSDictionary.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>XmlReader.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4C4329DE-D36E-4430-A46A-10672F2D471F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/bcaccinolo/XML-to-NSDictionary.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4C4329DE-D36E-4430-A46A-10672F2D471F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4C4329DE-D36E-4430-A46A-10672F2D471F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>XmlReader</string>
+		</dict>
+	</array>
+</dict>
+</plist>

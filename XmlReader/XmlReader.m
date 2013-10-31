@@ -1,5 +1,9 @@
 //
-//  XMLReader.m
+//  XmlReader.m
+//  XmlReader
+//
+//  Created by Benoit C on 10/31/13.
+//  Copyright (c) 2013 Benoit Caccinolo. All rights reserved.
 //
 
 #import "XMLReader.h"
@@ -86,7 +90,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 {
     // Get the dictionary for the current level in the stack
     NSMutableDictionary *parentDict = [dictionaryStack lastObject];
-
+    
     // Create the child dictionary for the new element, and initilaize it with the attributes
     NSMutableDictionary *childDict = [NSMutableDictionary dictionary];
     [childDict addEntriesFromDictionary:attributeDict];
@@ -106,7 +110,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
             // Create an array if it doesn't exist
             array = [NSMutableArray array];
             [array addObject:existingValue];
-
+            
             // Replace the child dictionary with an array of children dictionaries
             [parentDict setObject:array forKey:elementName];
         }
@@ -133,7 +137,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     if ([textInProgress length] > 0)
     {
         [dictInProgress setObject:textInProgress forKey:kXMLReaderTextNodeKey];
-
+        
         // Reset the text
         [textInProgress release];
         textInProgress = [[NSMutableString alloc] init];
